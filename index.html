@@ -1,0 +1,1048 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Análisis de Sistemas II · Guía Final</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: cuaderno técnico — cabecera fija con progreso, pestañas por tema, contenido en columna legible con tarjetas de práctica interactivas */
+:root{
+  --bg:#f3f6f5; --surface:#ffffff; --surface2:#e8eeec; --ink:#14201c; --mut:#56645f; --line:#cdd8d4;
+  --accent:#0d7a64; --accent-soft:#d6efe8; --blue:#2a56b8; --blue-soft:#e1e9fa;
+  --ok:#1b7a43; --ok-soft:#e2f4e8; --bad:#b4372b; --bad-soft:#fbe6e3; --warn:#8d5c00; --warn-soft:#fff2d6;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1715; --surface:#16211e; --surface2:#1d2a26; --ink:#e3ece9; --mut:#9aaaa4; --line:#2c3b36;
+  --accent:#3cc4a2; --accent-soft:#163a31; --blue:#86a8f5; --blue-soft:#1b2747;
+  --ok:#5fd18f; --ok-soft:#163323; --bad:#f08a7e; --bad-soft:#3b1d1a; --warn:#f0c062; --warn-soft:#3a2d12; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0f1715; --surface:#16211e; --surface2:#1d2a26; --ink:#e3ece9; --mut:#9aaaa4; --line:#2c3b36;
+  --accent:#3cc4a2; --accent-soft:#163a31; --blue:#86a8f5; --blue-soft:#1b2747;
+  --ok:#5fd18f; --ok-soft:#163323; --bad:#f08a7e; --bad-soft:#3b1d1a; --warn:#f0c062; --warn-soft:#3a2d12; color-scheme:dark }
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:880px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;flex-direction:column;gap:8px;padding-block:12px 0}
+.brand{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand h1{font-family:var(--f-display);font-weight:800;font-size:1.25rem;margin:0;letter-spacing:-.01em}
+.brand h1 span{color:var(--accent)}
+.prog{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--mut);font-variant-numeric:tabular-nums}
+.bar{width:120px;height:8px;border-radius:99px;background:var(--surface2);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs a{flex:none;text-decoration:none;color:var(--mut);font-weight:600;font-size:.92rem;padding:8px 12px;border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs a .n{font-family:var(--f-mono);font-size:.75rem;margin-right:4px;opacity:.7}
+nav.tabs a[aria-current="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+nav.tabs a .chk{color:var(--ok);margin-left:4px}
+main{padding-block:24px 64px}
+section.view{display:flex;flex-direction:column;gap:22px}
+.eyebrow{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h2{font-family:var(--f-display);font-weight:800;font-size:clamp(1.6rem,4vw,2.2rem);line-height:1.1;margin:4px 0 6px;text-wrap:balance;letter-spacing:-.015em}
+h3{font-family:var(--f-display);font-weight:700;font-size:1.25rem;margin:0 0 10px;text-wrap:balance}
+h4{font-size:1rem;margin:12px 0 6px}
+p{margin:0 0 10px;max-width:68ch}
+.lead{color:var(--mut);font-size:1.05rem}
+ul,ol{margin:0 0 10px;padding-left:22px} li{margin:3px 0}
+code,.mono{font-family:var(--f-mono);font-size:.88em}
+.block{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;min-width:0}
+details.block>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+details.block>summary::-webkit-details-marker{display:none}
+details.block>summary h3{margin:0}
+details.block>summary::after{content:"+";font-family:var(--f-mono);font-size:1.3rem;color:var(--accent);flex:none}
+details.block[open]>summary::after{content:"–"}
+details.block[open]>summary{margin-bottom:12px}
+.note{border-radius:8px;padding:10px 14px;margin:10px 0;font-size:.96rem}
+.note b.l{display:block;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.n-def{background:var(--blue-soft)} .n-def b.l{color:var(--blue)}
+.n-ok{background:var(--ok-soft)} .n-ok b.l{color:var(--ok)}
+.n-bad{background:var(--bad-soft)} .n-bad b.l{color:var(--bad)}
+.n-tip{background:var(--warn-soft)} .n-tip b.l{color:var(--warn)}
+.tpl{font-family:var(--f-mono);font-size:.9rem;background:var(--surface2);border-radius:8px;padding:12px 14px;white-space:pre-wrap;overflow-x:auto;margin:8px 0}
+.tpl b{color:var(--accent)}
+.tw{overflow-x:auto;margin:8px 0 12px}
+table{border-collapse:collapse;width:100%;font-size:.93rem;min-width:520px}
+th{text-align:left;font-weight:700;color:var(--accent);background:var(--surface2)}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.two>*{min-width:0}
+@media (max-width:640px){.two{grid-template-columns:1fr}}
+figure{margin:10px 0;overflow-x:auto}
+figure svg{display:block;margin:0 auto;max-width:100%;height:auto}
+figure.wide svg{max-width:none;width:620px}
+.tpl.pre{white-space:pre}
+figcaption{font-size:.85rem;color:var(--mut);text-align:center;margin-top:6px}
+svg .s{stroke:var(--ink);fill:none} svg .f{fill:var(--surface);stroke:var(--ink)} svg .t{fill:var(--ink)} svg .ta{fill:var(--accent)} svg .tb{fill:var(--bad)} svg .tbl{fill:var(--blue)}
+svg .fa{fill:var(--accent-soft);stroke:var(--accent)} svg .fb{fill:var(--blue-soft);stroke:var(--blue)} svg .fw{fill:var(--warn-soft);stroke:var(--warn)} svg .fo{fill:var(--ok-soft);stroke:var(--ok)}
+svg .bg{fill:var(--surface2);stroke:var(--blue)}
+
+/* práctica */
+.practice{border:2px solid var(--accent);background:var(--surface);border-radius:var(--r);padding:18px 20px}
+.practice>.head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.score{font-family:var(--f-mono);font-size:.85rem;color:var(--mut);font-variant-numeric:tabular-nums}
+.q{border-top:1px solid var(--line);padding:14px 0 6px}
+.q:first-of-type{border-top:0}
+.q .qt{font-weight:600;margin-bottom:8px}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt{all:unset;box-sizing:border-box;cursor:pointer;border:1.5px solid var(--line);border-radius:8px;padding:9px 12px;background:var(--surface);font-size:.97rem;display:flex;gap:10px;align-items:flex-start}
+.opt:hover{border-color:var(--accent)}
+.opt:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.opt .k{font-family:var(--f-mono);font-size:.8rem;color:var(--mut);padding-top:2px;flex:none}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+.fb{margin-top:8px;font-size:.94rem;border-radius:8px;padding:9px 12px}
+.fb.ok{background:var(--ok-soft)} .fb.no{background:var(--bad-soft)}
+.fb b{display:block}
+.hint{font-size:.88rem;color:var(--warn);margin-top:6px}
+button.btn{font:inherit;font-weight:600;font-size:.92rem;cursor:pointer;border-radius:8px;padding:8px 14px;border:1.5px solid var(--accent);background:var(--accent);color:var(--surface)}
+button.btn.ghost{background:transparent;color:var(--accent)}
+button.btn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.reveal{margin-top:8px}
+.reveal .ans{margin-top:8px;background:var(--surface2);border-radius:8px;padding:10px 14px;font-size:.95rem}
+
+/* flashcards */
+.fc-wrap{display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.fc{perspective:1000px;cursor:pointer;min-height:170px}
+.fc-in{position:relative;width:100%;min-height:170px;transition:transform .5s;transform-style:preserve-3d}
+.fc.flip .fc-in{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--r);padding:18px 20px;display:flex;flex-direction:column;justify-content:center;gap:6px;border:1.5px solid var(--line)}
+.fc-front{background:var(--surface)}
+.fc-front .w{font-family:var(--f-display);font-weight:700;font-size:1.35rem}
+.fc-back{background:var(--accent-soft);transform:rotateY(180deg);font-size:.98rem}
+.fc-meta{font-family:var(--f-mono);font-size:.78rem;color:var(--mut)}
+@media (prefers-reduced-motion:reduce){.fc-in,.bar i{transition:none}}
+
+/* encuentra el error */
+.story{font-size:1.08rem;line-height:2.1;background:var(--surface2);border-radius:8px;padding:12px 14px}
+.seg{cursor:pointer;border-radius:4px;padding:2px 3px;border-bottom:2px dotted var(--mut)}
+.seg.sel{background:var(--warn-soft);border-bottom-color:var(--warn)}
+.seg.hit{background:var(--ok-soft);border-bottom:2px solid var(--ok)}
+.seg.miss{background:var(--bad-soft);border-bottom:2px solid var(--bad)}
+.seg.lost{outline:2px dashed var(--bad)}
+.seg:focus-visible{outline:3px solid var(--blue)}
+
+/* constructor */
+.builder{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center}
+.builder label{font-family:var(--f-mono);font-weight:600;color:var(--accent)}
+.builder input,.builder textarea{font:inherit;font-size:.97rem;width:100%;padding:8px 10px;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.builder input:focus,.builder textarea:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.checks{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-direction:column;gap:4px;font-size:.95rem}
+.checks li::before{content:"○ ";font-family:var(--f-mono)}
+.checks li.ok{color:var(--ok)} .checks li.ok::before{content:"✓ "}
+.checks li.no{color:var(--bad)} .checks li.no::before{content:"✗ "}
+
+/* home */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.tcard{text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.tcard:hover{border-color:var(--accent)}
+.tcard .num{font-family:var(--f-mono);color:var(--accent);font-size:.8rem}
+.tcard b{font-family:var(--f-display);font-size:1.1rem}
+.tcard .st{font-size:.85rem;color:var(--mut);font-variant-numeric:tabular-nums}
+.pager{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pager a{color:var(--accent);font-weight:600;text-decoration:none}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:.75rem;padding:1px 7px;border-radius:99px;background:var(--surface2);color:var(--mut)}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <h1>Análisis de Sistemas II <span>· Guía final</span></h1>
+      <div class="prog"><span id="progTxt">0 / 0 correctas</span><div class="bar"><i id="progBar"></i></div><button class="btn ghost" id="resetBtn" type="button" style="padding:4px 10px;font-size:.8rem">Reiniciar</button></div>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Temas">
+      <a href="#inicio" data-v="inicio">Inicio</a>
+      <a href="#historias" data-v="historias"><span class="n">T1</span>Historias de usuario</a>
+      <a href="#casos" data-v="casos"><span class="n">T2</span>Casos de uso</a>
+      <a href="#arquitectura" data-v="arquitectura"><span class="n">T3</span>Arquitectura</a>
+      <a href="#clases" data-v="clases"><span class="n">T4</span>Clases</a>
+      <a href="#interfaces" data-v="interfaces"><span class="n">T5</span>UI/UX y menús</a>
+      <a href="#repaso" data-v="repaso">Repaso</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ============ INICIO ============ -->
+<section class="view" id="v-inicio">
+  <div>
+    <div class="eyebrow">Ingeniería en Sistemas · examen final</div>
+    <h2>Estudia un tema, practícalo y mira qué te falta</h2>
+    <p class="lead">Cada tema tiene la teoría en bloques que puedes abrir y cerrar, preguntas de opción múltiple con retroalimentación, tarjetas de memoria y un ejercicio práctico. Tu avance se guarda en este navegador.</p>
+  </div>
+  <div class="cards" id="homeCards"></div>
+  <div class="note n-tip"><b class="l">Cómo usarla</b>Lee la teoría, responde la práctica <i>sin mirar</i> y repasa las tarjetas de lo que fallaste. Cuando todos los temas estén arriba del 80 %, pide el siguiente simulacro de 35 puntos.</div>
+</section>
+
+<!-- ============ T1 HISTORIAS ============ -->
+<section class="view" id="v-historias" hidden>
+  <div>
+    <div class="eyebrow">Tema 1</div>
+    <h2>Historias de usuario y criterios de aceptación</h2>
+    <p class="lead">Una historia describe <b>quién</b> necesita algo, <b>qué</b> necesita y <b>para qué</b>. Nunca describe <b>cómo</b> se programa.</p>
+  </div>
+
+  <details class="block" open><summary><h3>La plantilla de tres partes</h3></summary>
+    <div class="tpl"><b>Como</b> [rol]  <b>quiero</b> [objetivo]  <b>para</b> [beneficio]</div>
+    <div class="tw"><table>
+      <tr><th>Parte</th><th>Responde a</th><th>Si la omites…</th></tr>
+      <tr><td><b>Como</b> (rol)</td><td>¿Quién lo necesita?</td><td>No sabes para quién diseñas ni a quién preguntar</td></tr>
+      <tr><td><b>Quiero</b> (objetivo)</td><td>¿Qué necesita?</td><td>No sabes qué construir</td></tr>
+      <tr><td><b>Para</b> (beneficio)</td><td>¿Por qué le importa?</td><td>No puedes priorizar ni proponer una solución mejor</td></tr>
+    </table></div>
+    <p>Se escribe <b>"quiero"</b>, no "debo": la historia es una necesidad del usuario, no una tarea ni una obligación.</p>
+    <div class="note n-ok"><b class="l">Ejemplo</b>Como <b>contador</b>, quiero <b>comparar los movimientos del estado de cuenta bancario con los registros contables</b> para <b>identificar diferencias y cerrar el mes con saldos cuadrados</b>.</div>
+  </details>
+
+  <details class="block"><summary><h3>Las 3 C y el criterio INVEST</h3></summary>
+    <h4>Las 3 C (Ron Jeffries)</h4>
+    <ul>
+      <li><b>Card:</b> la frase corta. Es un recordatorio, no la especificación completa.</li>
+      <li><b>Conversation:</b> los detalles se aclaran hablando con el usuario.</li>
+      <li><b>Confirmation:</b> los criterios de aceptación dicen cuándo está terminada.</li>
+    </ul>
+    <h4>INVEST: cómo es una buena historia</h4>
+    <div class="tw"><table>
+      <tr><th>Letra</th><th>Significa</th><th>Pregunta de control</th></tr>
+      <tr><td><b>I</b></td><td>Independiente</td><td>¿Se puede desarrollar sin esperar a otra?</td></tr>
+      <tr><td><b>N</b></td><td>Negociable</td><td>¿Deja espacio para conversar los detalles?</td></tr>
+      <tr><td><b>V</b></td><td>Valiosa</td><td>¿Tiene un "para" con valor real?</td></tr>
+      <tr><td><b>E</b></td><td>Estimable</td><td>¿Es tan clara que se puede estimar el esfuerzo?</td></tr>
+      <tr><td><b>S</b></td><td>Small (pequeña)</td><td>¿Cabe en un sprint, o es una épica?</td></tr>
+      <tr><td><b>T</b></td><td>Testeable</td><td>¿Tiene criterios verificables?</td></tr>
+    </table></div>
+  </details>
+
+  <details class="block"><summary><h3>Criterios de aceptación: Dado / Cuando / Entonces</h3></summary>
+    <div class="tpl"><b>Dado</b> [contexto o condición inicial]
+<b>Cuando</b> [acción o evento]
+<b>Entonces</b> [resultado esperado y verificable]</div>
+    <p>En inglés: <i>Given / When / Then</i> (formato Gherkin, de BDD). Un criterio tiene que poder marcarse como "pasa" o "no pasa". <i>"Que sea rápido"</i> no sirve; <i>"responde en menos de 5 segundos"</i> sí. Cubre el caso de <b>éxito</b>, los de <b>error</b> y los <b>límites</b>.</p>
+    <div class="tw"><table>
+      <tr><th>Tipo</th><th>Criterio para la conciliación bancaria</th></tr>
+      <tr><td>Éxito</td><td><b>Dado</b> que importé el estado de cuenta de octubre, <b>cuando</b> ejecuto la conciliación, <b>entonces</b> el sistema marca como "conciliados" los movimientos con igual monto, fecha y referencia.</td></tr>
+      <tr><td>Diferencia</td><td><b>Dado</b> que un depósito del banco no existe en los registros contables, <b>cuando</b> concilio, <b>entonces</b> aparece como "partida pendiente" con su monto y fecha.</td></tr>
+      <tr><td>Error</td><td><b>Dado</b> que cargo un archivo con formato inválido, <b>cuando</b> lo importo, <b>entonces</b> el sistema lo rechaza e indica los formatos aceptados (CSV, XLSX).</td></tr>
+      <tr><td>Límite</td><td><b>Dado</b> que la diferencia de saldos no es Q0.00, <b>cuando</b> intento aprobar, <b>entonces</b> el sistema no lo permite y muestra el monto de la diferencia.</td></tr>
+    </table></div>
+  </details>
+
+  <details class="block"><summary><h3>Errores típicos ("encuentra el error")</h3></summary>
+    <div class="tw"><table>
+      <tr><th>Error</th><th>Ejemplo incorrecto</th><th>Corrección</th></tr>
+      <tr><td>Escrita desde el sistema</td><td>"El sistema debe guardar…"</td><td>Escribir desde el rol</td></tr>
+      <tr><td>Incluye el CÓMO</td><td>"…mediante un JOIN a la tabla MOVIMIENTOS"</td><td>Quitar detalles técnicos</td></tr>
+      <tr><td>Sin beneficio</td><td>"Como contador quiero exportar a Excel."</td><td>Agregar "para…"</td></tr>
+      <tr><td>Rol genérico</td><td>"Como usuario…"</td><td>Contador, auditor, gerente…</td></tr>
+      <tr><td>Épica (muy grande)</td><td>"…gestionar toda la contabilidad"</td><td>Dividir en historias</td></tr>
+      <tr><td>Varias en una</td><td>"…importar <b>y</b> aprobar <b>y</b> reportar"</td><td>Una historia por objetivo</td></tr>
+      <tr><td>Criterio no verificable</td><td>"Debe ser fácil de usar"</td><td>Condición medible</td></tr>
+    </table></div>
+  </details>
+
+  <div class="practice">
+    <div class="head"><h3>Ejercicio: encuentra los errores</h3><span class="tag">toca los fragmentos con error</span></div>
+    <p>Hay <b>5 fragmentos con error</b> en esta historia. Márcalos y luego revisa.</p>
+    <div class="story" id="story"></div>
+    <div class="row" style="margin-top:10px"><button class="btn" type="button" id="storyCheck">Revisar</button><button class="btn ghost" type="button" id="storyReset">Intentar de nuevo</button></div>
+    <div id="storyFb"></div>
+  </div>
+
+  <div class="practice">
+    <div class="head"><h3>Constructor de historias</h3><span class="tag">validación en vivo</span></div>
+    <p>Escribe tu propia historia. El verificador revisa la estructura y busca detalles técnicos que no deberían estar.</p>
+    <div class="builder">
+      <label for="bRol">Como</label><input id="bRol" placeholder="contador de la empresa">
+      <label for="bQuiero">quiero</label><input id="bQuiero" placeholder="ver las diferencias entre el banco y el sistema">
+      <label for="bPara">para</label><input id="bPara" placeholder="cerrar el mes con saldos cuadrados">
+    </div>
+    <ul class="checks" id="bChecks"></ul>
+  </div>
+
+  <div class="practice" data-quiz="historias"></div>
+  <div class="practice" data-fc="historias"></div>
+  <div class="practice" data-open="historias"></div>
+</section>
+
+<!-- ============ T2 CASOS DE USO ============ -->
+<section class="view" id="v-casos" hidden>
+  <div>
+    <div class="eyebrow">Tema 2</div>
+    <h2>Casos de uso: actores, relaciones y flujos</h2>
+    <p class="lead">Un caso de uso es una interacción entre un <b>actor</b> y el <b>sistema</b> que produce un resultado de valor para el actor. Se nombra con <b>verbo en infinitivo + objeto</b>: "Conciliar cuenta".</p>
+  </div>
+
+  <details class="block" open><summary><h3>Elementos del diagrama</h3></summary>
+    <div class="tw"><table>
+      <tr><th>Elemento</th><th>Se dibuja como</th><th>Detalle</th></tr>
+      <tr><td><b>Actor</b></td><td>Monigote</td><td>Un <b>rol</b> externo: persona, otro sistema (Banco, SAP) o el tiempo.</td></tr>
+      <tr><td><b>Caso de uso</b></td><td>Óvalo</td><td>Una funcionalidad con valor para el actor.</td></tr>
+      <tr><td><b>Límite del sistema</b></td><td>Rectángulo</td><td>Casos de uso <b>dentro</b>, actores <b>fuera</b>.</td></tr>
+      <tr><td><b>Asociación</b></td><td>Línea continua</td><td>El actor participa en ese caso de uso.</td></tr>
+    </table></div>
+    <p><b>Actor primario:</b> inicia el caso para lograr su objetivo. <b>Actor secundario:</b> el sistema lo necesita para completarlo (el banco que envía el estado de cuenta).</p>
+  </details>
+
+  <details class="block" open><summary><h3>Include, extend y generalización</h3></summary>
+    <div class="tw"><table>
+      <tr><th>Relación</th><th>Flecha</th><th>Significado</th><th>Ejemplo</th></tr>
+      <tr><td><b>«include»</b></td><td>Punteada, <b>del base al incluido</b></td><td>Siempre se ejecuta (obligatorio, reutiliza pasos)</td><td>Aprobar conciliación → Validar usuario</td></tr>
+      <tr><td><b>«extend»</b></td><td>Punteada, <b>del opcional al base</b></td><td>Solo si se cumple una condición</td><td>Registrar ajuste manual → Conciliar cuenta</td></tr>
+      <tr><td><b>Generalización</b></td><td>Continua con triángulo hueco hacia el padre</td><td>Herencia entre actores o casos</td><td>Jefe Contable → Contador</td></tr>
+    </table></div>
+    <div class="note n-tip"><b class="l">Regla para recordar</b><b>Include = siempre</b>: la flecha sale del caso que necesita al otro. <b>Extend = a veces</b>: la flecha sale del caso opcional y apunta al base.</div>
+    <figure class="wide">
+      <svg viewBox="0 0 640 300" width="640" role="img" aria-label="Diagrama de casos de uso del sistema de conciliación bancaria">
+        <defs>
+          <marker id="op" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L9,5 L0,10" class="s"/></marker>
+          <marker id="tri" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto"><path d="M0,0 L11,6 L0,12 Z" class="f"/></marker>
+        </defs>
+        <rect x="150" y="10" width="330" height="280" rx="6" class="bg" stroke-width="1.5"/>
+        <text x="315" y="30" text-anchor="middle" font-size="12" font-weight="bold" class="tbl">Sistema de Conciliación Bancaria</text>
+        <g class="s" stroke-width="1.5"><circle cx="60" cy="90" r="10"/><line x1="60" y1="100" x2="60" y2="130"/><line x1="40" y1="110" x2="80" y2="110"/><line x1="60" y1="130" x2="45" y2="155"/><line x1="60" y1="130" x2="75" y2="155"/></g>
+        <text x="60" y="172" text-anchor="middle" font-size="11" class="t">Contador</text>
+        <g class="s" stroke-width="1.5"><circle cx="60" cy="215" r="9"/><line x1="60" y1="224" x2="60" y2="250"/><line x1="43" y1="234" x2="77" y2="234"/><line x1="60" y1="250" x2="47" y2="272"/><line x1="60" y1="250" x2="73" y2="272"/></g>
+        <text x="60" y="288" text-anchor="middle" font-size="10" class="t">Jefe Contable</text>
+        <line x1="60" y1="205" x2="60" y2="176" class="s" marker-end="url(#tri)"/>
+        <g class="s" stroke-width="1.5"><circle cx="580" cy="110" r="10"/><line x1="580" y1="120" x2="580" y2="150"/><line x1="560" y1="130" x2="600" y2="130"/><line x1="580" y1="150" x2="565" y2="175"/><line x1="580" y1="150" x2="595" y2="175"/></g>
+        <text x="580" y="192" text-anchor="middle" font-size="10" class="t">«sistema»</text><text x="580" y="205" text-anchor="middle" font-size="11" class="t">Banco</text>
+        <ellipse cx="260" cy="75" rx="85" ry="22" class="f"/><text x="260" y="79" text-anchor="middle" font-size="10.5" class="t">Importar estado de cuenta</text>
+        <ellipse cx="245" cy="150" rx="85" ry="22" class="f"/><text x="245" y="154" text-anchor="middle" font-size="10.5" class="t">Conciliar cuenta</text>
+        <ellipse cx="250" cy="250" rx="85" ry="22" class="f"/><text x="250" y="254" text-anchor="middle" font-size="10.5" class="t">Aprobar conciliación</text>
+        <ellipse cx="415" cy="215" rx="58" ry="20" class="f"/><text x="415" y="219" text-anchor="middle" font-size="10" class="t">Validar usuario</text>
+        <ellipse cx="415" cy="150" rx="58" ry="24" class="f"/><text x="415" y="147" text-anchor="middle" font-size="9.5" class="t">Registrar ajuste</text><text x="415" y="159" text-anchor="middle" font-size="9.5" class="t">manual</text>
+        <g class="s"><line x1="80" y1="110" x2="176" y2="80"/><line x1="80" y1="115" x2="162" y2="146"/><line x1="77" y1="240" x2="166" y2="250"/><line x1="560" y1="128" x2="345" y2="78"/></g>
+        <line x1="322" y1="238" x2="364" y2="224" class="s" stroke-dasharray="5,3" marker-end="url(#op)"/>
+        <text x="352" y="262" font-size="9.5" class="tbl">«include»</text>
+        <line x1="357" y1="150" x2="332" y2="150" class="s" stroke-dasharray="5,3" marker-end="url(#op)"/>
+        <text x="318" y="182" font-size="9.5" class="tb">«extend»</text>
+      </svg>
+      <figcaption>Jefe Contable hereda de Contador y además aprueba. Validar usuario es obligatorio (include); Registrar ajuste manual es opcional (extend).</figcaption>
+    </figure>
+  </details>
+
+  <details class="block"><summary><h3>Especificación textual del caso de uso</h3></summary>
+    <div class="tw"><table>
+      <tr><th style="width:28%">Campo</th><th>CU-02 Conciliar cuenta</th></tr>
+      <tr><td>Actor primario</td><td>Contador</td></tr>
+      <tr><td>Actor secundario</td><td>Banco</td></tr>
+      <tr><td>Precondiciones</td><td>El contador inició sesión y el estado de cuenta del período está importado.</td></tr>
+      <tr><td>Flujo principal</td><td>1. Selecciona cuenta y período. 2. El sistema muestra movimientos del banco y contables. 3. Solicita conciliación automática. 4. El sistema empareja por monto, fecha y referencia. 5. Muestra conciliados, pendientes y diferencia. 6. Guarda.</td></tr>
+      <tr><td>Flujo alterno</td><td>4a. Hay movimientos sin pareja: se marcan pendientes y se habilita "Registrar ajuste manual".</td></tr>
+      <tr><td>Flujo de excepción</td><td>2a. No existe estado de cuenta del período: se muestra error y termina el caso.</td></tr>
+      <tr><td>Postcondición</td><td>Conciliación guardada en estado "En revisión".</td></tr>
+    </table></div>
+    <p><b>Alterno</b>: otro camino que <i>sí</i> logra el objetivo. <b>Excepción</b>: un error que <i>impide</i> lograrlo.</p>
+  </details>
+
+  <details class="block"><summary><h3>Errores típicos</h3></summary>
+    <ul>
+      <li>Poner como actor algo interno del sistema, como "Base de datos".</li>
+      <li>Nombrar casos de uso como pantallas o botones ("Pantalla login", "Botón guardar").</li>
+      <li>Usar el diagrama como diagrama de flujo, conectando casos en secuencia.</li>
+      <li>Invertir la dirección de las flechas include/extend.</li>
+      <li>Abusar de include/extend sin necesidad.</li>
+    </ul>
+  </details>
+
+  <div class="practice" data-quiz="casos"></div>
+  <div class="practice" data-fc="casos"></div>
+  <div class="practice" data-open="casos"></div>
+</section>
+
+<!-- ============ T3 ARQUITECTURA ============ -->
+<section class="view" id="v-arquitectura" hidden>
+  <div>
+    <div class="eyebrow">Tema 3</div>
+    <h2>Patrones de arquitectura</h2>
+    <p class="lead">Un <b>patrón de arquitectura</b> define la estructura global del sistema. Un <b>patrón de diseño</b> es de mediana escala y organiza clases y objetos (Singleton, Factory, Adapter, Facade, Observer, Strategy). Un <b>idioma</b> es de bajo nivel y propio de un lenguaje.</p>
+  </div>
+
+  <details class="block" open><summary><h3>Por capas (N-capas)</h3></summary>
+    <div class="two">
+      <div>
+        <ul>
+          <li>Componentes en <b>capas horizontales</b>, cada una con un rol único.</li>
+          <li>La capa superior <b>usa a la inferior, nunca al revés</b>.</li>
+          <li>Cada capa es una <b>abstracción</b>; bien diseñada, se puede <b>reemplazar</b>.</li>
+          <li>El patrón <b>no fija cuántas capas</b> hay.</li>
+          <li><b>Capa cerrada:</b> hay que pasar por ella. <b>Abierta:</b> se puede saltar.</li>
+        </ul>
+      </div>
+      <figure style="margin:0">
+        <svg viewBox="0 0 260 200" width="260" role="img" aria-label="Cuatro capas apiladas">
+          <g font-size="11" text-anchor="middle">
+            <rect x="10" y="5" width="240" height="40" rx="4" class="fb"/><text x="130" y="23" font-weight="bold" class="t">Presentación</text><text x="130" y="37" font-size="9" class="t">UI, controladores</text>
+            <rect x="10" y="53" width="240" height="40" rx="4" class="fb"/><text x="130" y="71" font-weight="bold" class="t">Lógica de negocio</text><text x="130" y="85" font-size="9" class="t">conciliar, calcular notas</text>
+            <rect x="10" y="101" width="240" height="40" rx="4" class="fb"/><text x="130" y="119" font-weight="bold" class="t">Persistencia</text><text x="130" y="133" font-size="9" class="t">repositorios, DAO</text>
+            <rect x="10" y="149" width="240" height="40" rx="4" class="fb"/><text x="130" y="167" font-weight="bold" class="t">Base de datos</text><text x="130" y="181" font-size="9" class="t">SQL Server, PostgreSQL</text>
+          </g>
+        </svg>
+        <figcaption>Las peticiones bajan; nadie llama hacia arriba.</figcaption>
+      </figure>
+    </div>
+    <div class="two">
+      <div class="note n-ok"><b class="l">Ventajas</b>Separación de responsabilidades, fácil de entender y probar por capa, muy usado en sistemas empresariales.</div>
+      <div class="note n-bad"><b class="l">Desventajas</b>Tiende al monolito (un solo despliegue), escala como bloque, riesgo de capas "sumidero" que solo pasan datos.</div>
+    </div>
+  </details>
+
+  <details class="block"><summary><h3>Orientada a eventos</h3></summary>
+    <p>Los componentes se comunican <b>emitiendo eventos y reaccionando a ellos</b> ("PagoRegistrado", "NotaPublicada"), de forma <b>asíncrona y desacoplada</b>. El productor no sabe quién escucha. Componentes: <b>productor</b>, <b>canal o bus de eventos</b> y <b>consumidores</b>.</p>
+    <figure class="wide">
+      <svg viewBox="0 0 620 124" width="620" role="img" aria-label="Un productor publica un evento al bus y tres consumidores reaccionan">
+        <defs><marker id="a3" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L9,5 L0,10 Z" class="ta"/></marker></defs>
+        <g font-size="10.5" text-anchor="middle">
+          <rect x="5" y="42" width="110" height="40" rx="5" class="fb"/><text x="60" y="60" class="t">Módulo Pagos</text><text x="60" y="73" font-size="9" class="t">(productor)</text>
+          <rect x="170" y="37" width="150" height="50" rx="5" class="fw"/><text x="245" y="58" font-weight="bold" class="t">Canal / Bus</text><text x="245" y="72" font-size="9" class="t">PagoRegistrado</text>
+          <rect x="400" y="4" width="210" height="32" rx="5" class="fo"/><text x="505" y="24" class="t">Contabilidad: registrar partida</text>
+          <rect x="400" y="46" width="210" height="32" rx="5" class="fo"/><text x="505" y="66" class="t">Notificaciones: enviar correo</text>
+          <rect x="400" y="88" width="210" height="32" rx="5" class="fo"/><text x="505" y="108" class="t">Académico: habilitar asignación</text>
+        </g>
+        <g style="stroke:var(--accent)" stroke-width="1.5"><line x1="115" y1="62" x2="168" y2="62" marker-end="url(#a3)"/><line x1="320" y1="57" x2="398" y2="22" marker-end="url(#a3)"/><line x1="320" y1="62" x2="398" y2="62" marker-end="url(#a3)"/><line x1="320" y1="67" x2="398" y2="102" marker-end="url(#a3)"/></g>
+      </svg>
+      <figcaption>Agregar un consumidor nuevo no obliga a cambiar al productor.</figcaption>
+    </figure>
+    <div class="tw"><table>
+      <tr><th>Topología</th><th>Cómo funciona</th><th>Cuándo</th></tr>
+      <tr><td><b>Mediador</b></td><td>Un mediador central recibe el evento y <b>orquesta</b> los pasos y su orden.</td><td>Procesos de varios pasos que necesitan coordinación.</td></tr>
+      <tr><td><b>Broker</b></td><td>Sin orquestador: cada procesador emite nuevos eventos y otros reaccionan en cadena (<b>coreografía</b>).</td><td>Flujos simples, máxima escalabilidad y desacoplamiento.</td></tr>
+    </table></div>
+    <div class="two">
+      <div class="note n-ok"><b class="l">Ventajas</b>Bajo acoplamiento, escalable, buena respuesta en tiempo real, fácil agregar consumidores.</div>
+      <div class="note n-bad"><b class="l">Desventajas</b>Difícil de probar y depurar, transacciones complejas, consistencia eventual, orden de eventos.</div>
+    </div>
+  </details>
+
+  <details class="block"><summary><h3>Microservicios</h3></summary>
+    <ul>
+      <li>La aplicación es un <b>conjunto de servicios pequeños</b>, cada uno alrededor de una <b>capacidad de negocio</b> (Pagos, Inscripciones, Notas).</li>
+      <li>Cada uno <b>corre en su propio proceso</b>, idealmente con <b>su propia base de datos</b>, y se <b>despliega por separado</b>.</li>
+      <li>Se comunican con <b>mecanismos livianos</b> (HTTP/REST o mensajes).</li>
+      <li>Necesitan <b>despliegue automatizado</b> (CI/CD, contenedores).</li>
+      <li><b>Topologías:</b> API REST, basada en aplicación (REST) y centralizada en mensajes.</li>
+    </ul>
+    <div class="tw"><table>
+      <tr><th>Monolito</th><th>Microservicios</th></tr>
+      <tr><td>Un solo despliegue; si falla un módulo puede caer todo; escala completo.</td><td>Despliegue independiente; un servicio cae y el resto sigue; escala solo lo que se necesita.</td></tr>
+    </table></div>
+    <p><b>Atributos que favorece:</b> escalabilidad, disponibilidad, tolerancia a fallos, mantenibilidad, flexibilidad, interoperabilidad, portabilidad. <b>Costo:</b> complejidad operativa (red, monitoreo, consistencia de datos distribuidos).</p>
+  </details>
+
+  <details class="block"><summary><h3>Microkernel (plugins)</h3></summary>
+    <p>Un <b>núcleo mínimo</b> más <b>plugins independientes</b> que agregan funciones. Se diseña con <b>registro</b> (el núcleo sabe qué plugins hay), <b>interacción</b> y <b>contratos</b> (la interfaz que cada plugin cumple). Ejemplos: VS Code con extensiones, un ERP con módulos opcionales.</p>
+  </details>
+
+  <details class="block" open><summary><h3>¿Cuál elegir?</h3></summary>
+    <div class="tw"><table>
+      <tr><th>Si el escenario dice…</th><th>Piensa en…</th></tr>
+      <tr><td>Equipo pequeño, poco tiempo, sistema administrativo clásico</td><td><b>Capas</b></td></tr>
+      <tr><td>Reaccionar en tiempo real, avisar a varios módulos cuando ocurre algo</td><td><b>Eventos</b></td></tr>
+      <tr><td>Escalar solo una parte, equipos independientes, desplegar sin detener todo</td><td><b>Microservicios</b></td></tr>
+      <tr><td>Producto base + funciones que se agregan o personalizan por cliente</td><td><b>Microkernel</b></td></tr>
+    </table></div>
+    <div class="note n-tip"><b class="l">Para sacar 5/5</b>Justifica con <b>atributos de calidad</b> y menciona <b>una desventaja</b> que aceptas. Los patrones se combinan: un microservicio puede estar hecho por capas por dentro.</div>
+  </details>
+
+  <div class="practice">
+    <div class="head"><h3>Elige la arquitectura</h3><span class="score" id="archScore"></span></div>
+    <p>Lee cada escenario y elige el patrón que mejor encaja.</p>
+    <div id="arch"></div>
+  </div>
+
+  <div class="practice" data-quiz="arquitectura"></div>
+  <div class="practice" data-fc="arquitectura"></div>
+  <div class="practice" data-open="arquitectura"></div>
+</section>
+
+<!-- ============ T4 CLASES ============ -->
+<section class="view" id="v-clases" hidden>
+  <div>
+    <div class="eyebrow">Tema 4</div>
+    <h2>Modelado de clases orientado a objetos</h2>
+    <p class="lead">Una <b>clase</b> es una plantilla con <b>atributos</b> (sustantivos) y <b>métodos</b> (verbos). Un <b>objeto</b> es una instancia concreta de esa plantilla.</p>
+  </div>
+
+  <details class="block" open><summary><h3>Conceptos base</h3></summary>
+    <div class="tw"><table>
+      <tr><th>Concepto</th><th>Definición</th><th>Ejemplo académico</th></tr>
+      <tr><td><b>Encapsulamiento</b></td><td>Ocultar datos y exponer solo lo necesario</td><td>Atributos privados (-), métodos públicos (+)</td></tr>
+      <tr><td><b>Herencia</b></td><td>La subclase hereda atributos y métodos ("<b>es un</b>")</td><td>Estudiante <b>es una</b> Persona</td></tr>
+      <tr><td><b>Polimorfismo</b></td><td>El mismo método actúa distinto según la subclase</td><td><code>calcularPago()</code> de catedrático por hora vs. de planta</td></tr>
+      <tr><td><b>Clase abstracta</b></td><td>No se instancia; sirve de base</td><td><i>Persona</i> (en cursiva en UML)</td></tr>
+    </table></div>
+    <div class="tpl pre">┌───────────────────────────────┐
+│          Estudiante           │  nombre en singular
+├───────────────────────────────┤
+│ - carne : String              │  visibilidad nombre : tipo
+│ - fechaIngreso : Date         │
+├───────────────────────────────┤
+│ + asignarCurso(s: Seccion): bool │  visibilidad nombre(params): retorno
+│ + calcularPromedio(): float   │
+└───────────────────────────────┘
+<b>+</b> público   <b>-</b> privado   <b>#</b> protegido (visible para subclases)   <b>~</b> paquete</div>
+  </details>
+
+  <details class="block" open><summary><h3>Relaciones entre clases</h3></summary>
+    <div class="tw"><table>
+      <tr><th>Relación</th><th>Notación</th><th>Lectura</th><th>Ejemplo</th></tr>
+      <tr><td><b>Herencia</b></td><td>Triángulo hueco hacia el padre</td><td>"es un"</td><td>Catedrático → Persona</td></tr>
+      <tr><td><b>Asociación</b></td><td>Línea con multiplicidad</td><td>"se relaciona con"</td><td>Catedrático 1 — 0..* Sección</td></tr>
+      <tr><td><b>Agregación</b></td><td>Rombo <b>hueco</b> en el todo</td><td>"tiene", la parte vive sola</td><td>Carrera ◇— Curso</td></tr>
+      <tr><td><b>Composición</b></td><td>Rombo <b>relleno</b> en el todo</td><td>la parte muere con el todo</td><td>Factura ◆— LíneaFactura</td></tr>
+      <tr><td><b>Dependencia</b></td><td>Flecha punteada</td><td>"usa temporalmente"</td><td>Reporte - - &gt; Estudiante</td></tr>
+    </table></div>
+    <p><b>Multiplicidad:</b> <code>1</code> exactamente uno · <code>0..1</code> cero o uno · <code>*</code> o <code>0..*</code> muchos · <code>1..*</code> al menos uno.</p>
+    <figure class="wide">
+      <svg viewBox="0 0 640 330" width="640" role="img" aria-label="Diagrama de clases: Estudiante y Catedrático heredan de Persona, ambos se asocian con Sección">
+        <defs><marker id="tr4" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto"><path d="M0,0 L13,7 L0,14 Z" class="f"/></marker></defs>
+        <g font-size="10" class="t">
+          <rect x="230" y="5" width="180" height="100" class="f"/><line x1="230" y1="25" x2="410" y2="25" class="s"/><line x1="230" y1="75" x2="410" y2="75" class="s"/>
+          <text x="320" y="19" text-anchor="middle" font-weight="bold" font-style="italic">Persona {abstracta}</text>
+          <text x="236" y="38"># dpi : String</text><text x="236" y="51"># nombre : String</text><text x="236" y="64"># correo : String</text>
+          <text x="236" y="89">+ actualizarDatos(): void</text>
+          <rect x="20" y="165" width="200" height="100" class="f"/><line x1="20" y1="185" x2="220" y2="185" class="s"/><line x1="20" y1="225" x2="220" y2="225" class="s"/>
+          <text x="120" y="179" text-anchor="middle" font-weight="bold">Estudiante</text>
+          <text x="26" y="199">- carne : String</text><text x="26" y="213">- fechaIngreso : Date</text>
+          <text x="26" y="239">+ asignarCurso(s: Seccion): bool</text><text x="26" y="253">+ calcularPromedio(): float</text>
+          <rect x="420" y="165" width="200" height="100" class="f"/><line x1="420" y1="185" x2="620" y2="185" class="s"/><line x1="420" y1="225" x2="620" y2="225" class="s"/>
+          <text x="520" y="179" text-anchor="middle" font-weight="bold">Catedrático</text>
+          <text x="426" y="199">- codigoEmpleado : String</text><text x="426" y="213">- especialidad : String</text>
+          <text x="426" y="239">+ ingresarNota(n: Nota): void</text><text x="426" y="253">+ consultarSecciones(): List</text>
+          <rect x="250" y="235" width="140" height="80" class="f"/><line x1="250" y1="255" x2="390" y2="255" class="s"/><line x1="250" y1="288" x2="390" y2="288" class="s"/>
+          <text x="320" y="249" text-anchor="middle" font-weight="bold">Sección</text>
+          <text x="256" y="268">- codigo : String</text><text x="256" y="282">- cupo : int</text><text x="256" y="303">+ hayCupo(): bool</text>
+        </g>
+        <g class="s" stroke-width="1.3">
+          <polyline points="120,165 120,135 320,135 320,107" marker-end="url(#tr4)"/>
+          <polyline points="520,165 520,135 320,135"/>
+          <line x1="220" y1="245" x2="250" y2="270"/><line x1="420" y1="245" x2="390" y2="270"/>
+        </g>
+        <g font-size="9.5" class="tbl"><text x="222" y="240">0..*</text><text x="230" y="282">0..*</text><text x="400" y="240">1</text><text x="392" y="282">0..*</text></g>
+      </svg>
+      <figcaption>Atributos protegidos (#) en Persona para que las subclases los usen. Un catedrático imparte muchas secciones; un estudiante se asigna a muchas.</figcaption>
+    </figure>
+  </details>
+
+  <details class="block"><summary><h3>Método para resolver un ejercicio de clases</h3></summary>
+    <ol>
+      <li><b>Sustantivos</b> del enunciado: candidatos a clases o atributos.</li>
+      <li><b>Verbos</b>: candidatos a métodos.</li>
+      <li>¿Tiene identidad y comportamiento propio? Es clase. ¿Es solo un dato? Es atributo.</li>
+      <li>Atributos <b>repetidos</b> en varias clases se suben a una <b>superclase</b>.</li>
+      <li>Prueba "<b>es un</b>": "Estudiante es una Persona" ✓, "Sección es un Curso" ✗ (es asociación).</li>
+      <li>Relaciones, multiplicidades y visibilidad: atributos privados o protegidos, métodos públicos.</li>
+    </ol>
+    <div class="note n-bad"><b class="l">Errores típicos</b>Herencia donde es "tiene un" · repetir en la subclase atributos heredados · atributos públicos · métodos en la clase equivocada (<code>Estudiante.ingresarNota()</code>) · nombres en plural o como verbos.</div>
+  </details>
+
+  <div class="practice">
+    <div class="head"><h3>¿Qué relación es?</h3><span class="score" id="relScore"></span></div>
+    <p>Para cada par de clases, elige la relación correcta.</p>
+    <div id="rel"></div>
+  </div>
+
+  <div class="practice" data-quiz="clases"></div>
+  <div class="practice" data-fc="clases"></div>
+  <div class="practice" data-open="clases"></div>
+</section>
+
+<!-- ============ T5 INTERFACES ============ -->
+<section class="view" id="v-interfaces" hidden>
+  <div>
+    <div class="eyebrow">Tema 5</div>
+    <h2>Diseño de interfaces y menús orientados a la tarea</h2>
+    <p class="lead"><b>UI</b> es lo que se ve: botones, colores, distribución. <b>UX</b> es cómo vive el usuario el proceso de lograr su objetivo.</p>
+  </div>
+
+  <details class="block" open><summary><h3>Conceptos fundamentales</h3></summary>
+    <div class="tw"><table>
+      <tr><th>Concepto</th><th>Definición</th></tr>
+      <tr><td><b>Usabilidad</b></td><td>Facilidad de uso. Dimensiones objetivas: facilidad de aprendizaje, eficiencia, cualidad de ser recordado, eficacia. Subjetiva: satisfacción.</td></tr>
+      <tr><td><b>Utilidad</b></td><td>El beneficio real de usar el sistema.</td></tr>
+      <tr><td><b>Accesibilidad</b></td><td>Que lo use el mayor número de personas posible. Principios: <b>Perceptible, Operable, Comprensible, Robusto</b>.</td></tr>
+      <tr><td><b>Arquitectura de información</b></td><td>Cómo se organiza, etiqueta y navega el contenido.</td></tr>
+      <tr><td><b>DCU</b></td><td>Diseño Centrado en el Usuario: investigar, diseñar, prototipar, evaluar con usuarios y repetir.</td></tr>
+      <tr><td><b>Affordance</b></td><td>Propiedad visible que sugiere cómo se usa algo. <b>Falsa affordance:</b> parece usable y no lo es.</td></tr>
+      <tr><td><b>Modelo mental</b></td><td>Cómo cree el usuario que funciona algo. El diseño debe coincidir con él.</td></tr>
+    </table></div>
+  </details>
+
+  <details class="block"><summary><h3>Interacción, brechas y estilos</h3></summary>
+    <p><b>Etapas:</b> formular el objetivo → <b>ejecutar</b> (intención, especificar y ejecutar la acción) → <b>evaluar</b> (percibir, interpretar y evaluar el estado).</p>
+    <div class="two">
+      <div class="note n-def"><b class="l">Brecha de ejecución</b>"No sé <b>cómo</b> hacerlo": la opción está escondida o mal nombrada.</div>
+      <div class="note n-def"><b class="l">Brecha de evaluación</b>"No sé <b>si funcionó</b>": falta retroalimentación.</div>
+    </div>
+    <p><b>Estilos de interacción:</b> línea de comandos, menús de selección, formularios, lenguaje natural y manipulación directa (arrastrar, seleccionar, deshacer).</p>
+  </details>
+
+  <details class="block" open><summary><h3>Menús orientados a la tarea</h3></summary>
+    <p>El menú se organiza según <b>lo que el usuario quiere lograr</b> y su modelo mental, no según tablas, módulos técnicos o departamentos.</p>
+    <div class="two">
+      <div class="note n-bad"><b class="l">Orientado al sistema</b><div class="tpl" style="margin:4px 0 0">Archivo
+Tablas
+  ├ tbl_movimientos
+  └ tbl_bancos
+Procesos
+  └ proc_conc_01
+Utilidades
+  └ Exportar CSV</div></div>
+      <div class="note n-ok"><b class="l">Orientado a la tarea</b><div class="tpl" style="margin:4px 0 0">Conciliar
+  ├ Importar estado de cuenta
+  ├ Conciliar movimientos
+  └ Revisar pendientes
+Aprobar
+  └ Conciliaciones por aprobar
+Reportes
+  ├ Diferencias del mes
+  └ Historial</div></div>
+    </div>
+    <ul>
+      <li>Agrupar por objetivo y ordenar según el <b>flujo real</b> de trabajo.</li>
+      <li>Etiquetas con <b>verbos de acción</b> y en el <b>lenguaje del usuario</b>.</li>
+      <li>Lo más frecuente, primero y a pocos clics (2 o 3 niveles como máximo).</li>
+      <li>Menú <b>según el rol</b>: el estudiante no ve opciones del catedrático.</li>
+      <li><b>Consistencia</b> de nombres y ubicación; no saturar (7 ± 2 opciones por nivel como guía).</li>
+    </ul>
+  </details>
+
+  <details class="block"><summary><h3>Las 10 heurísticas de Nielsen</h3></summary>
+    <div class="tw"><table>
+      <tr><th>#</th><th>Heurística</th><th>Ejemplo</th></tr>
+      <tr><td>1</td><td>Visibilidad del estado del sistema</td><td>Barra de progreso al importar</td></tr>
+      <tr><td>2</td><td>Relación con el mundo real</td><td>"Partida pendiente", no "registro huérfano"</td></tr>
+      <tr><td>3</td><td>Control y libertad del usuario</td><td>Deshacer / Cancelar</td></tr>
+      <tr><td>4</td><td>Consistencia y estándares</td><td>"Guardar" siempre en el mismo lugar</td></tr>
+      <tr><td>5</td><td>Prevención de errores</td><td>"Aprobar" deshabilitado si la diferencia ≠ Q0.00</td></tr>
+      <tr><td>6</td><td>Reconocer antes que recordar</td><td>Listas en vez de escribir códigos</td></tr>
+      <tr><td>7</td><td>Flexibilidad y eficiencia</td><td>Atajos para expertos</td></tr>
+      <tr><td>8</td><td>Diseño estético y minimalista</td><td>Solo la información relevante</td></tr>
+      <tr><td>9</td><td>Reconocer, diagnosticar y recuperarse de errores</td><td>"El archivo debe ser CSV; cargaste un PDF"</td></tr>
+      <tr><td>10</td><td>Ayuda y documentación</td><td>Ayuda contextual</td></tr>
+    </table></div>
+    <p><b>Diseño de WebApps (S10):</b> metas de simplicidad, consistencia, identidad, robustez, navegabilidad, atractivo visual y compatibilidad. Distribución de arriba-izquierda a abajo-derecha, espacio en blanco, navegación agrupada y diseño adaptable.</p>
+  </details>
+
+  <div class="practice">
+    <div class="head"><h3>Ordena el menú del estudiante</h3><span class="score" id="menuScore"></span></div>
+    <p>Asigna cada opción al grupo correcto del menú. Las que <b>no son tareas del estudiante</b> van en "Quitar".</p>
+    <div id="menu"></div>
+    <div class="row" style="margin-top:10px"><button class="btn" type="button" id="menuCheck">Revisar</button></div>
+    <div id="menuFb"></div>
+  </div>
+
+  <div class="practice" data-quiz="interfaces"></div>
+  <div class="practice" data-fc="interfaces"></div>
+  <div class="practice" data-open="interfaces"></div>
+</section>
+
+<!-- ============ REPASO ============ -->
+<section class="view" id="v-repaso" hidden>
+  <div>
+    <div class="eyebrow">Antes del examen</div>
+    <h2>Repaso: no los confundas</h2>
+  </div>
+  <div class="block"><div class="tw"><table>
+    <tr><th>A</th><th>B</th><th>Cómo distinguirlos</th></tr>
+    <tr><td>Historia de usuario</td><td>Caso de uso</td><td>La historia es breve (quién, qué, para qué). El caso de uso detalla la interacción con flujos.</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Tarea técnica</td><td>El criterio es comportamiento verificable. La tarea es trabajo interno del desarrollador.</td></tr>
+    <tr><td>«include»</td><td>«extend»</td><td>Include es siempre (base → incluido). Extend es condicional (extensor → base).</td></tr>
+    <tr><td>Actor</td><td>Usuario</td><td>El actor es un rol; una persona puede tener varios.</td></tr>
+    <tr><td>Flujo alterno</td><td>Flujo de excepción</td><td>El alterno logra el objetivo por otro camino. La excepción lo impide.</td></tr>
+    <tr><td>Patrón de arquitectura</td><td>Patrón de diseño</td><td>Arquitectura es la estructura global. Diseño organiza clases y objetos.</td></tr>
+    <tr><td>Capas</td><td>Microservicios</td><td>Capas: división técnica horizontal, un despliegue. Microservicios: división por negocio, despliegues independientes.</td></tr>
+    <tr><td>Mediador</td><td>Broker</td><td>Mediador orquesta desde el centro. Broker es coreografía sin centro.</td></tr>
+    <tr><td>Herencia</td><td>Asociación</td><td>Si "X es un Y" suena falso, no es herencia.</td></tr>
+    <tr><td>Agregación ◇</td><td>Composición ◆</td><td>¿La parte sobrevive sin el todo? Agregación. ¿Muere con él? Composición.</td></tr>
+    <tr><td>Usabilidad</td><td>Accesibilidad</td><td>Facilidad de uso vs. que lo pueda usar cualquier persona.</td></tr>
+    <tr><td>Brecha de ejecución</td><td>Brecha de evaluación</td><td>"No sé cómo hacerlo" vs. "no sé si funcionó".</td></tr>
+  </table></div></div>
+  <div class="block">
+    <h3>Estrategia para los ejercicios prácticos (5 pts c/u)</h3>
+    <ol>
+      <li>Lee el escenario dos veces; subraya roles, sustantivos, verbos y condiciones ("si…", "solo cuando…").</li>
+      <li>Responde exactamente lo que piden.</li>
+      <li>Usa la notación correcta: plantilla, Dado/Cuando/Entonces, UML con visibilidad, flechas y multiplicidad.</li>
+      <li>Justifica en una línea: por qué ese actor, esa herencia o ese patrón.</li>
+      <li>Revisa los errores típicos del tema antes de entregar.</li>
+    </ol>
+  </div>
+  <div class="practice" data-quiz="mix"></div>
+</section>
+
+<div class="pager" id="pager" style="margin-top:28px"></div>
+</main>
+
+<script>
+(function(){
+"use strict";
+const ORDER=["inicio","historias","casos","arquitectura","clases","interfaces","repaso"];
+const NAMES={inicio:"Inicio",historias:"Historias de usuario",casos:"Casos de uso",arquitectura:"Arquitectura",clases:"Clases",interfaces:"UI/UX y menús",repaso:"Repaso"};
+const KEY="as2-guia-v1";
+let state={};
+try{state=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){state={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+const $=(s,r=document)=>r.querySelector(s);
+const el=(t,a={},h="")=>{const e=document.createElement(t);for(const k in a){if(k==="class")e.className=a[k];else e.setAttribute(k,a[k])}if(h)e.innerHTML=h;return e};
+
+/* ---------- DATOS ---------- */
+const QUIZ={
+historias:[
+ {q:"¿Cuál es la plantilla correcta de una historia de usuario?",o:["Como [rol] debo [tarea] usando [herramienta]","Como [rol] quiero [objetivo] para [beneficio]","El sistema debe [función] para [usuario]","Dado [contexto] cuando [acción] entonces [resultado]"],a:1,e:"Rol, objetivo y beneficio. La opción con Dado/Cuando/Entonces es el formato de los criterios de aceptación, no de la historia."},
+ {q:"La parte \"para…\" de una historia expresa:",o:["El algoritmo que se va a usar","La pantalla donde se hace","El beneficio o valor para el usuario o el negocio","El responsable técnico"],a:2,e:"El \"para\" explica por qué importa. Sin él no se puede priorizar ni proponer una mejor solución."},
+ {q:"\"Como gerente quiero administrar todo el módulo financiero para tener control\". ¿Qué letra de INVEST incumple más claramente?",o:["I – Independiente","N – Negociable","S – Small (pequeña)","V – Valiosa"],a:2,e:"\"Todo el módulo financiero\" es una épica: no cabe en un sprint. Además es difícil de estimar (E) y \"tener control\" no es verificable (T)."},
+ {q:"¿Cuál es un criterio de aceptación verificable?",o:["El sistema debe ser fácil de usar","La conciliación debe ser rápida","Dado un archivo con formato inválido, cuando lo importo, entonces el sistema lo rechaza e indica los formatos aceptados","El contador debe estar satisfecho"],a:2,e:"Un tester puede marcarlo como pasa o no pasa. Las demás opciones son subjetivas."},
+ {q:"¿Cuál de las 3 C corresponde a los criterios de aceptación?",o:["Card","Conversation","Confirmation","Code"],a:2,e:"Confirmation: cómo se confirma que la historia está terminada."},
+ {q:"¿Qué tiene de malo \"Como usuario quiero un botón azul que ejecute un SELECT para ver los saldos\"?",o:["Nada, está completa","Rol genérico, incluye el CÓMO (botón, SELECT) y no tiene beneficio","Solo le falta el beneficio","Debería escribirse en inglés"],a:1,e:"Tres problemas: \"usuario\" es genérico, \"botón azul\" y \"SELECT\" son detalles de implementación, y falta el \"para…\"."}
+],
+casos:[
+ {q:"¿Cómo se nombra correctamente un caso de uso?",o:["Pantalla de pagos","Verbo en infinitivo + objeto: \"Registrar pago\"","tbl_pagos","El pago"],a:1,e:"Un caso de uso es una acción con valor para el actor, así que se nombra como acción."},
+ {q:"Al aprobar una conciliación SIEMPRE se valida la identidad del usuario. ¿Qué relación se usa?",o:["«extend»","«include»","Generalización","Asociación"],a:1,e:"Siempre = include. La flecha punteada va de \"Aprobar conciliación\" hacia \"Validar usuario\"."},
+ {q:"\"Generar recibo PDF\" ocurre solo si el estudiante lo pide al pagar. ¿Relación y dirección?",o:["«include», de Pagar matrícula a Generar recibo","«extend», de Generar recibo a Pagar matrícula","«include», de Generar recibo a Pagar matrícula","Generalización"],a:1,e:"Es opcional, así que es extend, y la flecha sale del caso que extiende (Generar recibo) hacia el caso base."},
+ {q:"¿Cuál NO debería ser un actor?",o:["Banco","Estudiante","Base de datos del sistema","Reloj del sistema (proceso programado)"],a:2,e:"La base de datos es parte interna del sistema. Los actores están fuera del límite del sistema."},
+ {q:"\"Jefe Contable\" puede hacer todo lo que hace \"Contador\" y además aprobar. ¿Cómo se modela?",o:["Include entre los dos actores","Generalización: Jefe Contable hereda de Contador","Extend entre los actores","Dos actores sin relación"],a:1,e:"Generalización entre actores: línea continua con triángulo hueco hacia Contador."},
+ {q:"En un pago, la tarjeta es rechazada y el caso de uso termina sin pagar. Eso es un:",o:["Flujo principal","Flujo alterno","Flujo de excepción","Precondición"],a:2,e:"La excepción impide lograr el objetivo. Un flujo alterno sí lo logra por otro camino (pagar en efectivo, por ejemplo)."}
+],
+arquitectura:[
+ {q:"En la arquitectura por capas, ¿qué afirmación es correcta?",o:["Cualquier capa puede llamar a cualquier otra","La capa superior usa servicios de la inferior, pero no al revés","El patrón exige exactamente 3 capas","Cada capa se despliega como un servicio independiente"],a:1,e:"La dependencia va hacia abajo. El patrón no fija el número de capas."},
+ {q:"En arquitectura orientada a eventos, la topología con un componente central que orquesta los pasos es:",o:["Broker","Mediador","Microkernel","Cliente-servidor"],a:1,e:"El mediador orquesta. En el broker no hay centro y los eventos se encadenan (coreografía)."},
+ {q:"¿Por qué cada microservicio debería tener su propia base de datos?",o:["Porque es más barato","Para mantenerlos desacoplados y desplegarlos y escalarlos de forma independiente","Porque SQL no permite compartir tablas","No debería; deben compartir una sola"],a:1,e:"Una base de datos compartida vuelve a acoplar los servicios y crea un \"monolito distribuido\"."},
+ {q:"¿Cuál es una desventaja típica de la arquitectura orientada a eventos?",o:["Alto acoplamiento entre módulos","No escala","Es difícil de probar y depurar; la consistencia es eventual","No permite agregar consumidores nuevos"],a:2,e:"Al ser asíncrona y desacoplada, seguir un flujo y manejar errores es más complejo."},
+ {q:"Singleton, Factory, Observer y Adapter son:",o:["Patrones de arquitectura","Patrones de diseño","Idiomas","Topologías de microservicios"],a:1,e:"Son patrones de diseño (creación, estructura y comportamiento), de mediana escala."},
+ {q:"¿Qué atributo de calidad favorece MÁS directamente a los microservicios frente al monolito?",o:["Simplicidad operativa","Escalabilidad independiente por servicio","Menos tráfico de red","Transacciones más simples"],a:1,e:"Puedes escalar solo el servicio con carga. Lo que empeora es la simplicidad operativa y las transacciones."}
+],
+clases:[
+ {q:"¿Qué visibilidad permite que una subclase acceda a un atributo, pero no las demás clases?",o:["+ público","- privado","# protegido","~ paquete"],a:2,e:"Protegido (#) es la visibilidad típica para atributos de una superclase."},
+ {q:"Factura y LíneaDeFactura: la línea no existe sin su factura. ¿Qué relación es?",o:["Agregación","Composición","Herencia","Dependencia"],a:1,e:"Composición (rombo relleno en Factura): la parte muere con el todo."},
+ {q:"¿Qué está mal en \"Nota hereda de Estudiante\"?",o:["Nada","Una nota no \"es un\" estudiante; es una asociación","Debería ser composición siempre","Nota debería ser abstracta"],a:1,e:"La prueba \"es un\" falla. Un estudiante tiene notas: es una asociación."},
+ {q:"Empleado de planta y temporal calculan su pago distinto con el mismo método calcularPago(). Esto es:",o:["Encapsulamiento","Polimorfismo","Agregación","Sobrecarga de constructores"],a:1,e:"Cada subclase sobrescribe el mismo método con su propia lógica."},
+ {q:"¿Cuál es la multiplicidad de \"un catedrático imparte cero o más secciones\" del lado de Sección?",o:["1","0..1","0..*","1..*"],a:2,e:"Cero o muchas = 0..* (también se escribe *)."},
+ {q:"¿Dónde debe estar el método ingresarNota()?",o:["En Estudiante","En Catedrático (o en un servicio de notas)","En Sección como atributo","En Persona"],a:1,e:"Lo hace el catedrático. Ponerlo en Estudiante es asignar una responsabilidad a la clase equivocada."}
+],
+interfaces:[
+ {q:"Un menú orientado a la tarea se organiza según:",o:["Las tablas de la base de datos","Los departamentos de la empresa","Los objetivos del usuario y su flujo de trabajo","El orden alfabético"],a:2,e:"Se agrupa por lo que el usuario quiere lograr, con sus palabras y en el orden en que trabaja."},
+ {q:"Presionas \"Asignar curso\" y no aparece ningún mensaje. ¿Qué brecha y qué heurística?",o:["Ejecución · Prevención de errores","Evaluación · Visibilidad del estado del sistema","Ejecución · Consistencia","Evaluación · Ayuda y documentación"],a:1,e:"No sabes si funcionó: brecha de evaluación. Falta mostrar el estado (heurística 1)."},
+ {q:"Deshabilitar \"Aprobar\" mientras la diferencia no sea Q0.00 aplica la heurística de:",o:["Prevención de errores","Estética y minimalismo","Flexibilidad","Ayuda"],a:0,e:"Evita que el usuario cometa el error en vez de avisarle después."},
+ {q:"Texto azul subrayado que NO es un enlace es un ejemplo de:",o:["Affordance","Falsa affordance","Modelo mental","Accesibilidad"],a:1,e:"Parece usable (clicable) pero no lo es."},
+ {q:"¿Cuáles son los cuatro principios de accesibilidad?",o:["Rápido, bonito, simple, seguro","Perceptible, operable, comprensible, robusto","Usable, útil, deseable, valioso","Consistente, flexible, eficiente, estético"],a:1,e:"Son los principios POUR de WCAG."},
+ {q:"Usar listas desplegables en lugar de pedir que el usuario escriba un código aplica:",o:["Reconocer antes que recordar","Control y libertad","Consistencia","Diseño minimalista"],a:0,e:"El usuario reconoce la opción en vez de memorizar el código."}
+]
+};
+QUIZ.mix=["historias","casos","arquitectura","clases","interfaces"].flatMap(t=>QUIZ[t].slice(0,2).map((x,i)=>Object.assign({},x,{src:t})));
+
+const FC={
+historias:[["Plantilla","Como [rol] quiero [objetivo] para [beneficio]"],["3 C","Card, Conversation, Confirmation"],["INVEST","Independiente, Negociable, Valiosa, Estimable, Small, Testeable"],["Gherkin","Dado [contexto] · Cuando [acción] · Entonces [resultado verificable]"],["Épica","Historia demasiado grande para un sprint; se divide en historias más pequeñas"]],
+casos:[["«include»","Siempre se ejecuta. Flecha punteada del caso base al incluido"],["«extend»","Opcional o condicional. Flecha punteada del caso que extiende al base"],["Actor","Rol externo al sistema: persona, otro sistema o el tiempo"],["Flujo alterno","Otro camino que sí logra el objetivo"],["Flujo de excepción","Error que impide lograr el objetivo"]],
+arquitectura:[["Capas","Horizontales; la superior usa a la inferior, nunca al revés"],["Mediador","Orquestador central de eventos"],["Broker","Eventos encadenados sin centro (coreografía)"],["Microservicios","Servicios pequeños por capacidad de negocio, proceso y despliegue propios"],["Microkernel","Núcleo mínimo + plugins (registro, interacción, contratos)"]],
+clases:[["# protegido","Visible para la clase y sus subclases"],["Agregación ◇","La parte puede existir sin el todo"],["Composición ◆","La parte muere con el todo"],["Polimorfismo","Mismo método, comportamiento distinto en cada subclase"],["Prueba de herencia","¿X \"es un\" Y? Si suena falso, no es herencia"]],
+interfaces:[["Brecha de ejecución","\"No sé cómo hacerlo\""],["Brecha de evaluación","\"No sé si funcionó\""],["Affordance","Propiedad visible que sugiere cómo usar algo"],["POUR","Perceptible, Operable, Comprensible, Robusto"],["Menú orientado a la tarea","Agrupa por objetivos del usuario, con verbos y en su lenguaje"]]
+};
+
+const OPEN={
+historias:[
+ ["Escribe dos criterios de aceptación (éxito y error) para: \"Como estudiante, quiero asignarme cursos en línea para no hacer filas en control académico\".","<b>Éxito:</b> Dado que la sección tiene cupo y no hay traslape de horario, cuando me asigno, entonces el sistema confirma la asignación y la muestra en mi horario.<br><b>Error:</b> Dado que la sección no tiene cupo, cuando intento asignarme, entonces el sistema muestra \"Sin cupo disponible\" y no registra la asignación."],
+ ["¿Cuál es la diferencia entre un criterio de aceptación y una tarea técnica?","El criterio describe un <b>comportamiento observable y verificable</b> por el usuario o tester. La tarea técnica es <b>trabajo del equipo</b> para implementarlo (crear una tabla, un endpoint, etc.)."]
+],
+casos:[
+ ["En un sistema académico identifica 3 actores (uno que no sea persona) y 2 casos de uso por actor.","<b>Estudiante:</b> asignar cursos, consultar notas. <b>Catedrático:</b> ingresar notas, consultar listado de alumnos. <b>Sistema de pagos / Banco:</b> confirmar pago de matrícula, notificar pago rechazado. También vale Coordinador académico (abrir secciones, aprobar cambios)."],
+ ["Escribe el flujo principal de \"Asignar curso\" en 5 pasos y un flujo de excepción.","1. El estudiante selecciona el curso. 2. El sistema muestra las secciones disponibles. 3. El estudiante elige una sección. 4. El sistema valida cupo, prerrequisitos y traslapes. 5. El sistema confirma y actualiza el horario.<br><b>Excepción 4a:</b> no cumple prerrequisitos; el sistema lo indica y no asigna."]
+],
+arquitectura:[
+ ["Una universidad tiene picos enormes de tráfico solo en el módulo de asignación al inicio de semestre. ¿Qué patrón recomiendas, por qué, y qué desventaja aceptas?","<b>Microservicios:</b> se escala solo el servicio de asignación durante los picos y, si falla, no tumba los demás módulos (escalabilidad, disponibilidad, tolerancia a fallos). <b>Desventaja:</b> más complejidad operativa (red, monitoreo, consistencia de datos). Combinarlo con eventos para avisar a otros módulos también es válido."],
+ ["¿Puede la capa de datos llamar a la capa de presentación? ¿Qué principio se rompería?","No. Las capas superiores usan a las inferiores, nunca al revés. Se rompe la separación de responsabilidades y el aislamiento entre capas, y aparece acoplamiento."]
+],
+clases:[
+ ["\"El sistema registra empleados con código, nombre y salario base. Los de planta reciben bono anual; los temporales tienen fecha de fin de contrato. Ambos calculan su pago mensual de forma distinta.\" Define la jerarquía.","<b>Empleado</b> {abstracta}: # codigo: String, # nombre: String, # salarioBase: float, + calcularPago(): float {abstracto}.<br><b>EmpleadoPlanta</b> → Empleado: - bonoAnual: float, + calcularPago(): float.<br><b>EmpleadoTemporal</b> → Empleado: - fechaFinContrato: Date, + calcularPago(): float, + contratoVigente(): bool.<br>El <b>polimorfismo</b> está en calcularPago()."],
+ ["¿Por qué usar # en vez de - en los atributos de una superclase?","Con # (protegido) las subclases pueden usar el atributo directamente y sigue oculto para las demás clases. Con - (privado) ni las subclases lo verían."]
+],
+interfaces:[
+ ["Un portal estudiantil tiene el menú \"Módulo1, Módulo2, Consultas SQL, Mantenimiento, Ayuda\". Rediséñalo orientado a la tarea (mínimo 3 grupos).","<b>Mis cursos</b> (Asignarme cursos, Ver mi horario, Retirar curso) · <b>Mis notas</b> (Notas del semestre, Historial académico) · <b>Pagos</b> (Pagar matrícula, Estado de cuenta) · <b>Ayuda</b>. \"Consultas SQL\" y \"Mantenimiento\" se quitan: no son tareas del estudiante."],
+ ["Diferencia entre usabilidad y accesibilidad, con un ejemplo de cada una.","<b>Usabilidad:</b> facilidad de uso (asignar un curso en 3 clics). <b>Accesibilidad:</b> que lo use cualquier persona, incluidas personas con discapacidad (lector de pantalla, buen contraste, navegación con teclado)."]
+]
+};
+
+/* ---------- QUIZ ---------- */
+function quizId(t,i){return t+":"+i}
+function renderQuiz(box){
+  const t=box.dataset.quiz, qs=QUIZ[t];
+  const head=el("div",{class:"head"});
+  head.append(el("h3",{},t==="mix"?"Simulacro rápido de los 5 temas":"Práctica: opción múltiple"));
+  const sc=el("span",{class:"score"});head.append(sc);box.append(head);
+  if(t==="mix")box.append(el("p",{},"Diez preguntas, dos por tema. Comparten el progreso con cada tema."));
+  qs.forEach((q,i)=>{
+    const id=q.src?quizId(q.src,QUIZ[q.src].indexOf(QUIZ[q.src].find(x=>x.q===q.q))):quizId(t,i);
+    const w=el("div",{class:"q","data-id":id});
+    w.append(el("div",{class:"qt"},(i+1)+". "+q.q));
+    const opts=el("div",{class:"opts"});
+    q.o.forEach((o,j)=>{
+      const b=el("button",{class:"opt",type:"button"});
+      b.append(el("span",{class:"k"},"abcd"[j]),el("span",{},o));
+      b.addEventListener("click",()=>answer(id,j,q));
+      opts.append(b);
+    });
+    w.append(opts,el("div",{class:"fbx"}));
+    box.append(w);
+  });
+  const r=el("div",{class:"row",style:"margin-top:10px"});
+  const rb=el("button",{class:"btn ghost",type:"button"},"Reintentar esta práctica");
+  rb.addEventListener("click",()=>{box.querySelectorAll(".q").forEach(w=>{delete (state.q||{})[w.dataset.id]});save();paintAll()});
+  r.append(rb);box.append(r);
+}
+function answer(id,j,q){
+  state.q=state.q||{};
+  if(state.q[id]!==undefined)return;
+  state.q[id]=j;save();paintAll();
+}
+function paintQuizzes(){
+  document.querySelectorAll("[data-quiz]").forEach(box=>{
+    let ok=0,done=0;
+    box.querySelectorAll(".q").forEach(w=>{
+      const [t,i]=w.dataset.id.split(":");const q=QUIZ[t][+i];
+      const a=(state.q||{})[w.dataset.id];
+      const bs=w.querySelectorAll(".opt");const fb=w.querySelector(".fbx");
+      bs.forEach((b,j)=>{b.classList.remove("right","wrong");b.disabled=a!==undefined;
+        if(a!==undefined){if(j===q.a)b.classList.add("right");else if(j===a)b.classList.add("wrong")}});
+      fb.innerHTML="";
+      if(a!==undefined){done++;const good=a===q.a;if(good)ok++;
+        fb.append(el("div",{class:"fb "+(good?"ok":"no")},"<b>"+(good?"Correcto.":"Todavía no.")+"</b>"+q.e))}
+    });
+    box.querySelector(".score").textContent=ok+" / "+box.querySelectorAll(".q").length+" correctas"+(done&&done<box.querySelectorAll(".q").length?" · "+done+" respondidas":"");
+  });
+}
+
+/* ---------- FLASHCARDS ---------- */
+function renderFC(box){
+  const t=box.dataset.fc,cards=FC[t];let i=0;
+  const head=el("div",{class:"head"});head.append(el("h3",{},"Tarjetas de memoria"),el("span",{class:"tag"},"toca para voltear"));box.append(head);
+  const fc=el("div",{class:"fc",tabindex:"0",role:"button","aria-label":"Voltear tarjeta"});
+  const inner=el("div",{class:"fc-in"});const fr=el("div",{class:"fc-face fc-front"});const bk=el("div",{class:"fc-face fc-back"});
+  inner.append(fr,bk);fc.append(inner);
+  const nav=el("div",{class:"row"});
+  const prev=el("button",{class:"btn ghost",type:"button"},"← Anterior");const next=el("button",{class:"btn",type:"button"},"Siguiente →");
+  const meta=el("span",{class:"fc-meta"});nav.append(prev,next,meta);
+  const wrap=el("div",{class:"fc-wrap"});wrap.append(fc,nav);box.append(wrap);
+  function show(){fc.classList.remove("flip");fr.innerHTML='<span class="fc-meta">Concepto</span><span class="w">'+cards[i][0]+'</span>';bk.innerHTML='<span class="fc-meta">'+cards[i][0]+'</span><span>'+cards[i][1]+'</span>';meta.textContent=(i+1)+" / "+cards.length}
+  const flip=()=>fc.classList.toggle("flip");
+  fc.addEventListener("click",flip);fc.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();flip()}});
+  prev.addEventListener("click",()=>{i=(i-1+cards.length)%cards.length;show()});
+  next.addEventListener("click",()=>{i=(i+1)%cards.length;show()});
+  show();
+}
+
+/* ---------- PREGUNTAS ABIERTAS ---------- */
+function renderOpen(box){
+  const t=box.dataset.open;
+  const head=el("div",{class:"head"});head.append(el("h3",{},"Preguntas de desarrollo"),el("span",{class:"tag"},"respóndelas en papel primero"));box.append(head);
+  OPEN[t].forEach((p,i)=>{
+    const w=el("div",{class:"q"});w.append(el("div",{class:"qt"},(i+1)+". "+p[0]));
+    const id="op-"+t+"-"+i;
+    const ta=el("textarea",{id:id,rows:"3",style:"width:100%;font:inherit;font-size:.95rem;padding:8px 10px;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)",placeholder:"Escribe aquí tu respuesta (se guarda en este navegador)"});
+    ta.value=(state.open||{})[id]||"";
+    ta.addEventListener("input",()=>{state.open=state.open||{};state.open[id]=ta.value;save()});
+    const rv=el("div",{class:"reveal"});const b=el("button",{class:"btn ghost",type:"button"},"Ver respuesta modelo");
+    const ans=el("div",{class:"ans"},p[1]);ans.hidden=true;
+    b.addEventListener("click",()=>{ans.hidden=!ans.hidden;b.textContent=ans.hidden?"Ver respuesta modelo":"Ocultar respuesta"});
+    rv.append(b,ans);w.append(ta,rv);box.append(w);
+  });
+}
+
+/* ---------- ENCUENTRA EL ERROR ---------- */
+const STORY=[
+ ["El sistema debe",true,"Está escrita desde el sistema, no desde un rol."],
+ [" permitir al ",false],
+ ["usuario",true,"Rol genérico: ¿qué usuario? Contador, auditor…"],
+ [" ",false],
+ ["importar el estado de cuenta en CSV,",true,"Mezcla varias historias y fija un formato técnico."],
+ [" compararlo ",false],
+ ["con la tabla MOVIMIENTOS mediante un JOIN",true,"Detalle de implementación: describe el CÓMO."],
+ [" y generar el reporte de diferencias en PDF",false],
+ [".",true,"Termina sin \"para…\": no tiene beneficio."]
+];
+function renderStory(){
+  const s=$("#story");s.innerHTML="";
+  STORY.forEach((p,i)=>{
+    if(p[0].trim()===""){s.append(document.createTextNode(p[0]));return}
+    const sp=el("span",{class:"seg",tabindex:"0",role:"button","data-i":i},p[0]==="."?" [final de la frase]":p[0]);
+    const tg=()=>{if(s.dataset.done)return;sp.classList.toggle("sel")};
+    sp.addEventListener("click",tg);sp.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();tg()}});
+    s.append(sp);
+  });
+  delete s.dataset.done;$("#storyFb").innerHTML="";
+}
+$("#storyCheck").addEventListener("click",()=>{
+  const s=$("#story");s.dataset.done="1";let hit=0,fp=0;const out=[];
+  s.querySelectorAll(".seg").forEach(sp=>{const p=STORY[+sp.dataset.i];const sel=sp.classList.contains("sel");sp.classList.remove("sel");
+    if(p[1]&&sel){sp.classList.add("hit");hit++;out.push("✓ <b>"+p[0].replace(/^\.$/,"Final")+"</b>: "+p[2])}
+    else if(p[1]&&!sel){sp.classList.add("lost");out.push("✗ Te faltó <b>"+p[0].replace(/^\.$/,"el final")+"</b>: "+p[2])}
+    else if(!p[1]&&sel){sp.classList.add("miss");fp++}});
+  const box=el("div",{class:"fb "+(hit===5&&!fp?"ok":"no"),style:"margin-top:10px"},"<b>Encontraste "+hit+" de 5"+(fp?" y marcaste "+fp+" fragmento(s) que estaban bien":"")+".</b>"+out.join("<br>")+"<br><br><b>Versión corregida:</b> Como contador, quiero ver las diferencias entre el estado de cuenta del banco y los registros contables para corregirlas antes del cierre mensual.");
+  $("#storyFb").innerHTML="";$("#storyFb").append(box);
+  state.story=Math.max(state.story||0,hit===5&&!fp?1:0);save();paintProgress();
+});
+$("#storyReset").addEventListener("click",renderStory);
+
+/* ---------- CONSTRUCTOR ---------- */
+const TECH=/\b(sql|select|join|tabla|base de datos|bd|bot[oó]n|click|clic|api|endpoint|csv|pdf|excel|pantalla|formulario|java|python|servidor|query)\b/i;
+function bCheck(){
+  const r=$("#bRol").value.trim(),q=$("#bQuiero").value.trim(),p=$("#bPara").value.trim();
+  const items=[
+    [r.length>2,"Tiene un rol"],
+    [r.length>2&&!/^(el\s+)?(usuario|sistema|cliente)$/i.test(r),"El rol es específico (no \"usuario\" ni \"sistema\")"],
+    [q.length>5,"Tiene un objetivo"],
+    [!TECH.test(q+" "+p),"No incluye detalles técnicos (tablas, botones, SQL, formatos de archivo…)"],
+    [!/\b(y|e)\b.+\b(y|e)\b/i.test(q),"Parece una sola necesidad (sin varias \"y\" encadenadas)"],
+    [p.length>5,"Tiene un beneficio (\"para…\")"]
+  ];
+  const ul=$("#bChecks");ul.innerHTML="";
+  const any=r||q||p;
+  items.forEach(([ok,t])=>ul.append(el("li",{class:any?(ok?"ok":"no"):""},t)));
+  if(any&&items.every(x=>x[0]))ul.append(el("li",{class:"ok",style:"font-weight:700"},"Historia: Como "+escapeH(r)+", quiero "+escapeH(q)+" para "+escapeH(p)+"."));
+  state.builder={r,q,p};save();
+}
+function escapeH(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+["bRol","bQuiero","bPara"].forEach(id=>$("#"+id).addEventListener("input",bCheck));
+
+/* ---------- ELIGE ARQUITECTURA ---------- */
+const ARCH=[
+ ["Un colegio pequeño necesita un sistema de notas. Hay 2 desarrolladores y 3 meses.","Capas","Sistema administrativo clásico, equipo pequeño y poco tiempo: capas es simple y suficiente."],
+ ["Cuando se registra un pago, Contabilidad, Notificaciones y Académico deben reaccionar, y mañana podrían sumarse más módulos.","Eventos","Un hecho dispara reacciones en varios módulos sin acoplarlos: orientada a eventos."],
+ ["Una plataforma de e-commerce necesita escalar solo el catálogo en Black Friday, con equipos que despliegan por separado.","Microservicios","Escalado y despliegue independientes por capacidad de negocio."],
+ ["Un ERP vende un núcleo base y cada cliente activa módulos extra (nómina, inventario, facturación).","Microkernel","Núcleo + funciones conectables por cliente: microkernel (plugins)."],
+ ["Un banco necesita detectar fraude en tiempo real a partir de miles de transacciones por segundo.","Eventos","Procesamiento reactivo en tiempo real de un flujo de eventos."]
+];
+const ARCHO=["Capas","Eventos","Microservicios","Microkernel"];
+function renderArch(){
+  const c=$("#arch");c.innerHTML="";
+  ARCH.forEach((a,i)=>{
+    const w=el("div",{class:"q"});w.append(el("div",{class:"qt"},(i+1)+". "+a[0]));
+    const o=el("div",{class:"row"});
+    const fb=el("div");
+    ARCHO.forEach(x=>{const b=el("button",{class:"opt",type:"button",style:"width:auto"},x);
+      b.addEventListener("click",()=>{state.arch=state.arch||{};if(state.arch[i]!==undefined)return;state.arch[i]=x;save();renderArch();paintProgress()});o.append(b)});
+    const ans=(state.arch||{})[i];
+    if(ans!==undefined){o.querySelectorAll(".opt").forEach(b=>{b.disabled=true;if(b.textContent===a[1])b.classList.add("right");else if(b.textContent===ans)b.classList.add("wrong")});
+      fb.append(el("div",{class:"fb "+(ans===a[1]?"ok":"no")},"<b>"+(ans===a[1]?"Correcto.":"La mejor opción es "+a[1]+".")+"</b>"+a[2]))}
+    w.append(o,fb);c.append(w);
+  });
+  const ok=ARCH.filter((a,i)=>(state.arch||{})[i]===a[1]).length;
+  $("#archScore").textContent=ok+" / "+ARCH.length+" correctas";
+  if(!c.querySelector(".resetA")){const r=el("button",{class:"btn ghost resetA",type:"button",style:"margin-top:10px"},"Reintentar");r.addEventListener("click",()=>{state.arch={};save();renderArch();paintProgress()});c.append(r)}
+}
+
+/* ---------- RELACIONES ---------- */
+const REL=[
+ ["Catedrático — Persona","Herencia","Un catedrático es una persona."],
+ ["Factura — LíneaDeFactura","Composición","La línea no existe sin su factura."],
+ ["Departamento — Empleado","Agregación","El empleado sigue existiendo si el departamento desaparece."],
+ ["Catedrático — Sección","Asociación","Un catedrático imparte secciones; ninguno es parte del otro."],
+ ["ReporteNotas — Estudiante","Dependencia","El reporte usa al estudiante solo temporalmente para generarse."],
+ ["Casa — Habitación","Composición","Si se demuele la casa, sus habitaciones dejan de existir."]
+];
+const RELO=["Herencia","Asociación","Agregación","Composición","Dependencia"];
+function renderRel(){
+  const c=$("#rel");c.innerHTML="";
+  REL.forEach((a,i)=>{
+    const w=el("div",{class:"q"});w.append(el("div",{class:"qt mono"},a[0]));
+    const o=el("div",{class:"row"});const fb=el("div");
+    RELO.forEach(x=>{const b=el("button",{class:"opt",type:"button",style:"width:auto"},x);
+      b.addEventListener("click",()=>{state.rel=state.rel||{};if(state.rel[i]!==undefined)return;state.rel[i]=x;save();renderRel();paintProgress()});o.append(b)});
+    const ans=(state.rel||{})[i];
+    if(ans!==undefined){o.querySelectorAll(".opt").forEach(b=>{b.disabled=true;if(b.textContent===a[1])b.classList.add("right");else if(b.textContent===ans)b.classList.add("wrong")});
+      fb.append(el("div",{class:"fb "+(ans===a[1]?"ok":"no")},"<b>"+(ans===a[1]?"Correcto.":"Es "+a[1]+".")+"</b>"+a[2]))}
+    w.append(o,fb);c.append(w);
+  });
+  const ok=REL.filter((a,i)=>(state.rel||{})[i]===a[1]).length;
+  $("#relScore").textContent=ok+" / "+REL.length+" correctas";
+  const r=el("button",{class:"btn ghost",type:"button",style:"margin-top:10px"},"Reintentar");r.addEventListener("click",()=>{state.rel={};save();renderRel();paintProgress()});c.append(r);
+}
+
+/* ---------- MENÚ ---------- */
+const MENU=[["Asignarme cursos","Mis cursos"],["Ver mi horario","Mis cursos"],["Notas del semestre","Mis notas"],["Historial académico","Mis notas"],["Pagar matrícula","Pagos"],["Estado de cuenta","Pagos"],["Consultas SQL","Quitar"],["Mantenimiento de tablas","Quitar"],["Ingresar notas","Quitar"]];
+const MENUG=["Mis cursos","Mis notas","Pagos","Quitar"];
+function renderMenu(){
+  const c=$("#menu");c.innerHTML="";
+  const tw=el("div",{class:"tw"});const tb=el("table");
+  tb.innerHTML="<tr><th>Opción</th><th>Grupo</th></tr>";
+  MENU.forEach((m,i)=>{const tr=el("tr");const td1=el("td",{},m[0]);const td2=el("td");
+    const sel=el("select",{id:"menu-"+i,style:"font:inherit;padding:4px 8px;border-radius:6px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)"});
+    sel.append(el("option",{value:""},"— elegir —"));MENUG.forEach(g=>sel.append(el("option",{value:g},g)));
+    sel.value=((state.menu||{}).a||{})[i]||"";
+    sel.addEventListener("change",()=>{state.menu=state.menu||{a:{}};state.menu.a=state.menu.a||{};state.menu.a[i]=sel.value;save()});
+    td2.append(sel);tr.append(td1,td2);tb.append(tr)});
+  tw.append(tb);c.append(tw);
+}
+$("#menuCheck").addEventListener("click",()=>{
+  let ok=0;const wrong=[];
+  MENU.forEach((m,i)=>{const s=$("#menu-"+i);s.style.borderColor="";if(s.value===m[1]){ok++;s.style.borderColor="var(--ok)"}else{s.style.borderColor="var(--bad)";wrong.push("<b>"+m[0]+"</b> va en "+m[1])}});
+  state.menu=state.menu||{a:{}};state.menu.best=Math.max(state.menu.best||0,ok);save();paintProgress();
+  $("#menuScore").textContent=ok+" / "+MENU.length+" correctas";
+  $("#menuFb").innerHTML="";$("#menuFb").append(el("div",{class:"fb "+(ok===MENU.length?"ok":"no"),style:"margin-top:10px"},"<b>"+ok+" de "+MENU.length+" bien ubicadas.</b>"+(wrong.length?wrong.join("<br>")+"<br>":"")+"\"Ingresar notas\" es tarea del catedrático, y las opciones técnicas no le sirven al estudiante: un menú por rol solo muestra las tareas de ese rol."))
+});
+
+/* ---------- PROGRESO ---------- */
+function topicStats(t){
+  const qs=QUIZ[t];let ok=0;qs.forEach((q,i)=>{if((state.q||{})[t+":"+i]===q.a)ok++});
+  let tot=qs.length;
+  if(t==="historias"){tot+=1;ok+=state.story||0}
+  if(t==="arquitectura"){tot+=ARCH.length;ok+=ARCH.filter((a,i)=>(state.arch||{})[i]===a[1]).length}
+  if(t==="clases"){tot+=REL.length;ok+=REL.filter((a,i)=>(state.rel||{})[i]===a[1]).length}
+  if(t==="interfaces"){tot+=MENU.length;ok+=(state.menu||{}).best||0}
+  return {ok,tot};
+}
+const TOP=["historias","casos","arquitectura","clases","interfaces"];
+function paintProgress(){
+  let ok=0,tot=0;
+  const hc=$("#homeCards");hc.innerHTML="";
+  TOP.forEach((t,i)=>{const s=topicStats(t);ok+=s.ok;tot+=s.tot;
+    const pct=Math.round(100*s.ok/s.tot);
+    const a=el("a",{class:"tcard",href:"#"+t});
+    a.append(el("span",{class:"num"},"TEMA "+(i+1)),el("b",{},NAMES[t]),el("span",{class:"st"},s.ok+" / "+s.tot+" correctas · "+pct+" %"));
+    const bar=el("div",{class:"bar",style:"width:100%"});const ii=el("i");ii.style.width=pct+"%";bar.append(ii);a.append(bar);hc.append(a);
+    const tab=document.querySelector('nav.tabs a[data-v="'+t+'"]');const old=tab.querySelector(".chk");if(old)old.remove();
+    if(pct>=80)tab.append(el("span",{class:"chk","aria-label":"dominado"},"✓"));
+  });
+  $("#progTxt").textContent=ok+" / "+tot+" correctas";
+  $("#progBar").style.width=(tot?100*ok/tot:0)+"%";
+}
+function paintAll(){paintQuizzes();paintProgress()}
+
+$("#resetBtn").addEventListener("click",function(){
+  if(this.dataset.armed){state={};save();this.dataset.armed="";this.textContent="Reiniciar";renderStory();renderArch();renderRel();renderMenu();bLoad();document.querySelectorAll("[data-open] textarea").forEach(t=>t.value="");paintAll();$("#menuFb").innerHTML="";$("#menuScore").textContent="";return}
+  this.dataset.armed="1";this.textContent="¿Borrar todo? Toca otra vez";setTimeout(()=>{this.dataset.armed="";this.textContent="Reiniciar"},3500);
+});
+
+/* ---------- RUTAS ---------- */
+function route(){
+  let v=(location.hash||"").slice(1);if(!ORDER.includes(v))v="inicio";
+  ORDER.forEach(x=>{$("#v-"+x).hidden=x!==v});
+  document.querySelectorAll("nav.tabs a").forEach(a=>a.setAttribute("aria-current",a.dataset.v===v?"true":"false"));
+  const i=ORDER.indexOf(v);const pg=$("#pager");pg.innerHTML="";
+  pg.append(i>0?el("a",{href:"#"+ORDER[i-1]},"← "+NAMES[ORDER[i-1]]):el("span"));
+  if(i<ORDER.length-1)pg.append(el("a",{href:"#"+ORDER[i+1]},NAMES[ORDER[i+1]]+" →"));
+  const cur=document.querySelector('nav.tabs a[aria-current="true"]');if(cur&&cur.scrollIntoView)cur.scrollIntoView({block:"nearest",inline:"center"});
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",route);
+
+/* ---------- INICIO ---------- */
+document.querySelectorAll("[data-quiz]").forEach(renderQuiz);
+document.querySelectorAll("[data-fc]").forEach(renderFC);
+document.querySelectorAll("[data-open]").forEach(renderOpen);
+renderStory();renderArch();renderRel();renderMenu();
+function bLoad(){const b=state.builder||{};$("#bRol").value=b.r||"";$("#bQuiero").value=b.q||"";$("#bPara").value=b.p||"";bCheck()}
+bLoad();
+paintAll();route();
+})();
+</script>
+
+</body></html>
